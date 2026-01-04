@@ -1,0 +1,43 @@
+service: zoho-ats
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ap-south-1
+  environment:
+    ZOHO_REFRESH: ${env:ZOHO_REFRESH}
+    CLIENT_ID: ${env:CLIENT_ID}
+    CLIENT_SECRET: ${env:CLIENT_SECRET}
+
+functions:
+  jobs:
+    handler: handler.get_jobs
+    events:
+      - http:
+          path: jobs
+          method: get
+
+  candidates:
+    handler: handler.create_candidate
+    events:
+      - http:
+          path: candidates
+          method: post
+
+  applications:
+    handler: handler.list_applications
+    events:
+      - http:
+          path: applications
+          method: get
+
+  apply:
+    handler: handler.apply_candidate
+    events:
+      - http:
+          path: apply
+          method: post        
+
+plugins:
+  - serverless-offline
